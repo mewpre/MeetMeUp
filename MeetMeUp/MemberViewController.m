@@ -11,10 +11,11 @@
 @interface MemberViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property NSMutableArray *profileTopicsArray;
-@property (strong, nonatomic) IBOutlet UILabel *nameLabel;
 @property (strong, nonatomic) IBOutlet UILabel *locationLabel;
 @property (strong, nonatomic) IBOutlet UIImageView *memberImageView;
 @property (strong, nonatomic) IBOutlet UITableView *topicsTableView;
+
+@property UIActivityIndicatorView *navbarActivityIndicator;
 
 @end
 
@@ -24,11 +25,18 @@
 {
     [super viewDidLoad];
     self.profileTopicsArray = [NSMutableArray new];
+    // Create a navbar activity indicator, insert it into a UIBarButtonItem and set it right of the nav item
+    self.navbarActivityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+
+    UIBarButtonItem *navSpinnerBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.navbarActivityIndicator];
+    [self.navigationItem setRightBarButtonItem:navSpinnerBarButtonItem];
     [self jsonParser:self.memberID];
 }
 
 -(void)jsonParser: (NSString *)memberID
 {
+    // Start animating the spinner on view load
+    [self.navbarActivityIndicator startAnimating];
     [self.profileTopicsArray removeAllObjects];
     NSString *urlString =[NSString stringWithFormat:@"https://api.meetup.com/2/members?&sign=true&photo-host=public&member_id=%@&page=20&key=7e112a7d315af3ee18672e53675b43", memberID];
     NSURL *url = [NSURL URLWithString:urlString];
@@ -39,7 +47,7 @@
          NSArray *jsonArray = [json objectForKey:@"results"];
         for (NSDictionary *user in jsonArray)
          {
-             self.nameLabel.text = user[@"name"];
+             self.navigationItem.title = user[@"name"];
              self.locationLabel.text = [NSString stringWithFormat:@"%@, %@", user[@"city"], user[@"state"]];
              NSDictionary *photo = user[@"photo"];
              NSURL *photoURL = [NSURL URLWithString:photo[@"photo_link"]];
@@ -52,6 +60,8 @@
              }
         }
          [self.topicsTableView reloadData];
+         [self.navbarActivityIndicator stopAnimating];
+
      }];
 }
 

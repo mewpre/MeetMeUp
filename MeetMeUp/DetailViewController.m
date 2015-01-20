@@ -12,7 +12,6 @@
 #import "Comment.h"
 
 @interface DetailViewController ()<UIWebViewDelegate, UITableViewDataSource, UITableViewDelegate>
-@property (strong, nonatomic) IBOutlet UILabel *eventNameLabel;
 @property (strong, nonatomic) IBOutlet UILabel *hostingGroupLabel;
 @property (strong, nonatomic) IBOutlet UILabel *RSVPLabel;
 @property (strong, nonatomic) IBOutlet UIWebView *descriptionWebView;
@@ -29,13 +28,11 @@
     [super viewDidLoad];
     self.descriptionWebView.delegate = self;
     self.navigationItem.title = self.event.name;
-    self.eventNameLabel.text = self.event.name;
     self.hostingGroupLabel.text = self.event.hostingGroup;
     self.RSVPLabel.text = [NSString stringWithFormat:@"%@ %@ attending", self.event.RSVPcount, self.event.memberTitle];
     [self.descriptionWebView loadHTMLString:[self.event.HTMLDescription description] baseURL:nil];
     self.commentsArray = [NSMutableArray new];
     [self jsonParser:self.event.eventID];
-    // Do any additional setup after loading the view.
 }
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType

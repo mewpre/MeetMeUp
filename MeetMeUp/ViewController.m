@@ -51,6 +51,17 @@
     return cell;
 }
 
+-(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+    NSString *searchTerm = searchBar.text;
+    NSCharacterSet *set = [NSCharacterSet whitespaceCharacterSet];
+    //only do a search if searchTerm does not consist of only whitespace
+    if (![[searchTerm stringByTrimmingCharactersInSet: set] length] == 0)
+    {
+        [self jsonParser:searchTerm];
+    }
+}
+
 //Helper Method
 -(void)jsonParser: (NSString *)searchTerm
 {
@@ -84,17 +95,6 @@
          [self.meetupsTableView reloadData];
          [self.navbarActivityIndicator stopAnimating];
      }];
-}
-
--(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
-{
-    NSString *searchTerm = searchBar.text;
-    NSCharacterSet *set = [NSCharacterSet whitespaceCharacterSet];
-    //only do a search if searchTerm does not consist of only whitespace
-    if (![[searchTerm stringByTrimmingCharactersInSet: set] length] == 0)
-    {
-        [self jsonParser:searchTerm];
-    }
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(UITableViewCell *)sender

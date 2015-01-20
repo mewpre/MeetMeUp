@@ -18,7 +18,8 @@
 
 @implementation WebViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     NSURLRequest *addressRequest = [NSURLRequest requestWithURL:self.homePageURL];
     [self.webView loadRequest:addressRequest];
@@ -46,10 +47,12 @@
     self.backButton.enabled = [self.webView canGoBack];
     self.forwardButton.enabled = [self.webView canGoForward];
 }
+
 - (IBAction)onBackButtonTapped:(id)sender
 {
     [self.webView goBack];
 }
+
 - (IBAction)onForwardButtonTapped:(id)sender
 {
     [self.webView goForward];

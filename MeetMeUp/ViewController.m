@@ -10,10 +10,13 @@
 #import "MeetupEvent.h"
 #import "DetailViewController.h"
 
-@interface ViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface ViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
 
 @property NSMutableArray *meetupsArray;
 @property (strong, nonatomic) IBOutlet UITableView *meetupsTableView;
+@property (strong, nonatomic) IBOutlet UINavigationItem *navigationBarItem;
+
+@property UIActivityIndicatorView *navbarActivityIndicator;
 
 @end
 
@@ -23,7 +26,14 @@
 {
     [super viewDidLoad];
     self.meetupsArray = [NSMutableArray new];
-    [self jsonParser];
+
+    // Create a navbar activity indicator, insert it into a UIBarButtonItem and set it right of the nav item
+    self.navbarActivityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+
+    UIBarButtonItem *navSpinnerBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.navbarActivityIndicator];
+    [self.navigationItem setRightBarButtonItem:navSpinnerBarButtonItem];
+
+    [self jsonParser:@"mobile"];
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -42,9 +52,13 @@
 }
 
 //Helper Method
--(void)jsonParser
+-(void)jsonParser: (NSString *)searchTerm
 {
-    NSURL *url = [NSURL URLWithString:@"https://api.meetup.com/2/open_events.json?zip=60604&text=mobile&time=,1w&key=7e112a7d315af3ee18672e53675b43"];
+    // Start animating the spinner on view load
+    [self.navbarActivityIndicator startAnimating];
+    [self.meetupsArray removeAllObjects];
+    NSString *urlString =[NSString stringWithFormat: @"https://api.meetup.com/2/open_events.json?zip=60604&text=%@&time=,1w&key=7e112a7d315af3ee18672e53675b43", searchTerm];
+    NSURL *url = [NSURL URLWithString:urlString];
     NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
     [NSURLConnection sendAsynchronousRequest:urlRequest queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError)
      {
@@ -53,27 +67,40 @@
          for (NSDictionary *meetups in jsonArray)
          {
              MeetupEvent *newEvent = [MeetupEvent new];
-             NSDictionary *venue = meetups[@"venue"];
              newEvent.name = meetups[@"name"];
-             newEvent.location = [NSString stringWithFormat:@"%@\n%@\n%@, %@", venue[@"name"], venue[@"address_1"], venue[@"city"], venue[@"state"]];
-             NSDictionary *group = meetups[@"group"];
-             newEvent.hostingGroup = group[@"name"];
              newEvent.HTMLDescription = [NSString stringWithFormat:@"<html><head><title></title></head><body style=\"background:transparent;\"> %@ </body></html>", meetups[@"description"]];
              newEvent.RSVPcount = meetups[@"yes_rsvp_count"];
              newEvent.homePage = [NSURL URLWithString:meetups[@"event_url"]];
+             newEvent.eventID = meetups[@"id"];
+
+             NSDictionary *venue = meetups[@"venue"];
+             newEvent.location = [NSString stringWithFormat:@"%@\n%@\n%@, %@", venue[@"name"], venue[@"address_1"], venue[@"city"], venue[@"state"]];
+             
+             NSDictionary *group = meetups[@"group"];
+             newEvent.memberTitle = group[@"who"];
+             newEvent.hostingGroup = group[@"name"];
              [self.meetupsArray addObject:newEvent];
          }
          [self.meetupsTableView reloadData];
+         [self.navbarActivityIndicator stopAnimating];
      }];
+}
+
+-(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+    NSString *searchTerm = searchBar.text;
+    NSCharacterSet *set = [NSCharacterSet whitespaceCharacterSet];
+    //only do a search if searchTerm does not consist of only whitespace
+    if (![[searchTerm stringByTrimmingCharactersInSet: set] length] == 0)
+    {
+        [self jsonParser:searchTerm];
+    }
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(UITableViewCell *)sender
 {
-    UITableViewCell *cell = (UITableViewCell *)sender;
-
+    UITableViewCell *cell = sender;
     DetailViewController *dvc = segue.destinationViewController;
-    // Find the index path from the selected table view cell
-    // and use that to find the index of the creature in the creature array
     dvc.event = [self.meetupsArray objectAtIndex:[[self.meetupsTableView indexPathForCell:cell] row]];
 }
 

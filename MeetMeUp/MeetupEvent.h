@@ -16,5 +16,7 @@
 @property NSString *location;
 @property NSString *RSVPcount;
 @property NSURL *homePage;
+@property NSString *eventID;
+@property NSString *memberTitle;
 
 @end

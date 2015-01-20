@@ -16,9 +16,9 @@
 		6018068E1A6DAAEB00823404 /* MeetMeUpTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6018068D1A6DAAEB00823404 /* MeetMeUpTests.m */; };
 		601806991A6DB7D100823404 /* MeetupEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 601806981A6DB7D100823404 /* MeetupEvent.m */; };
 		6018069C1A6DC04200823404 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6018069B1A6DC04200823404 /* DetailViewController.m */; };
-		601806A21A6DCDCE00823404 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 601806A11A6DCDCE00823404 /* WebViewController.m */; };
 		601806A51A6DDDCF00823404 /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = 601806A41A6DDDCF00823404 /* Comment.m */; };
 		601806A81A6DF24800823404 /* MemberViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 601806A71A6DF24800823404 /* MemberViewController.m */; };
+		601806AB1A6E1BC700823404 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 601806AA1A6E1BC700823404 /* WebViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,12 +49,12 @@
 		601806981A6DB7D100823404 /* MeetupEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeetupEvent.m; sourceTree = "<group>"; };
 		6018069A1A6DC04200823404 /* DetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
 		6018069B1A6DC04200823404 /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
-		601806A01A6DCDCE00823404 /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WebViewController.h; path = ../WebViewController.h; sourceTree = "<group>"; };
-		601806A11A6DCDCE00823404 /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WebViewController.m; path = ../WebViewController.m; sourceTree = "<group>"; };
 		601806A31A6DDDCF00823404 /* Comment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Comment.h; sourceTree = "<group>"; };
 		601806A41A6DDDCF00823404 /* Comment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Comment.m; sourceTree = "<group>"; };
 		601806A61A6DF24800823404 /* MemberViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemberViewController.h; sourceTree = "<group>"; };
 		601806A71A6DF24800823404 /* MemberViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MemberViewController.m; sourceTree = "<group>"; };
+		601806A91A6E1BC600823404 /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
+		601806AA1A6E1BC700823404 /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,8 +102,8 @@
 				601806791A6DAAEB00823404 /* ViewController.m */,
 				6018069A1A6DC04200823404 /* DetailViewController.h */,
 				6018069B1A6DC04200823404 /* DetailViewController.m */,
-				601806A01A6DCDCE00823404 /* WebViewController.h */,
-				601806A11A6DCDCE00823404 /* WebViewController.m */,
+				601806A91A6E1BC600823404 /* WebViewController.h */,
+				601806AA1A6E1BC700823404 /* WebViewController.m */,
 				601806A61A6DF24800823404 /* MemberViewController.h */,
 				601806A71A6DF24800823404 /* MemberViewController.m */,
 				6018067B1A6DAAEB00823404 /* Main.storyboard */,
@@ -247,7 +247,7 @@
 				601806A81A6DF24800823404 /* MemberViewController.m in Sources */,
 				601806A51A6DDDCF00823404 /* Comment.m in Sources */,
 				6018069C1A6DC04200823404 /* DetailViewController.m in Sources */,
-				601806A21A6DCDCE00823404 /* WebViewController.m in Sources */,
+				601806AB1A6E1BC700823404 /* WebViewController.m in Sources */,
 				6018067A1A6DAAEB00823404 /* ViewController.m in Sources */,
 				601806771A6DAAEB00823404 /* AppDelegate.m in Sources */,
 				601806991A6DB7D100823404 /* MeetupEvent.m in Sources */,

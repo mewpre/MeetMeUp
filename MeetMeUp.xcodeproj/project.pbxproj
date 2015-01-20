@@ -14,6 +14,9 @@
 		6018067F1A6DAAEB00823404 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6018067E1A6DAAEB00823404 /* Images.xcassets */; };
 		601806821A6DAAEB00823404 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 601806801A6DAAEB00823404 /* LaunchScreen.xib */; };
 		6018068E1A6DAAEB00823404 /* MeetMeUpTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6018068D1A6DAAEB00823404 /* MeetMeUpTests.m */; };
+		601806991A6DB7D100823404 /* MeetupEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 601806981A6DB7D100823404 /* MeetupEvent.m */; };
+		6018069C1A6DC04200823404 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6018069B1A6DC04200823404 /* DetailViewController.m */; };
+		601806A21A6DCDCE00823404 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 601806A11A6DCDCE00823404 /* WebViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +43,12 @@
 		601806871A6DAAEB00823404 /* MeetMeUpTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MeetMeUpTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6018068C1A6DAAEB00823404 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6018068D1A6DAAEB00823404 /* MeetMeUpTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MeetMeUpTests.m; sourceTree = "<group>"; };
+		601806971A6DB7D100823404 /* MeetupEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeetupEvent.h; sourceTree = "<group>"; };
+		601806981A6DB7D100823404 /* MeetupEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeetupEvent.m; sourceTree = "<group>"; };
+		6018069A1A6DC04200823404 /* DetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
+		6018069B1A6DC04200823404 /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
+		601806A01A6DCDCE00823404 /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WebViewController.h; path = ../WebViewController.h; sourceTree = "<group>"; };
+		601806A11A6DCDCE00823404 /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WebViewController.m; path = ../WebViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,7 +94,13 @@
 				601806761A6DAAEB00823404 /* AppDelegate.m */,
 				601806781A6DAAEB00823404 /* ViewController.h */,
 				601806791A6DAAEB00823404 /* ViewController.m */,
+				6018069A1A6DC04200823404 /* DetailViewController.h */,
+				6018069B1A6DC04200823404 /* DetailViewController.m */,
+				601806A01A6DCDCE00823404 /* WebViewController.h */,
+				601806A11A6DCDCE00823404 /* WebViewController.m */,
 				6018067B1A6DAAEB00823404 /* Main.storyboard */,
+				601806971A6DB7D100823404 /* MeetupEvent.h */,
+				601806981A6DB7D100823404 /* MeetupEvent.m */,
 				6018067E1A6DAAEB00823404 /* Images.xcassets */,
 				601806801A6DAAEB00823404 /* LaunchScreen.xib */,
 				601806711A6DAAEB00823404 /* Supporting Files */,
@@ -219,8 +234,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6018069C1A6DC04200823404 /* DetailViewController.m in Sources */,
+				601806A21A6DCDCE00823404 /* WebViewController.m in Sources */,
 				6018067A1A6DAAEB00823404 /* ViewController.m in Sources */,
 				601806771A6DAAEB00823404 /* AppDelegate.m in Sources */,
+				601806991A6DB7D100823404 /* MeetupEvent.m in Sources */,
 				601806741A6DAAEB00823404 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

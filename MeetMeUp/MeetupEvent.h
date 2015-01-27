@@ -18,5 +18,8 @@
 @property NSURL *homePage;
 @property NSString *eventID;
 @property NSString *memberTitle;
+@property NSArray *commentsArray;
+
++ (void)retrieveMeetups: (NSString *)searchTerm withCompletion:(void(^)(NSArray *meetupEventsArray))complete;
 
 @end

@@ -30,7 +30,6 @@
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     [self.spinner startAnimating];
     self.spinner.hidden = false;
-    //    self.navigationBarTitle.title =[webView stringByEvaluatingJavaScriptFromString:@"document.title"];
 }
 
 -(void)webViewDidFinishLoad:(UIWebView *)webView

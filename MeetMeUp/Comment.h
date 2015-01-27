@@ -7,12 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
+@class Member;
 
 @interface Comment : NSObject
 
-@property NSString *memberName;
-@property NSString *memberID;
 @property NSString *comment;
 @property NSDate *commentDate;
+@property Member *member;
+
+-(instancetype)initWithDictionary: (NSDictionary *)dictionary;
++ (void)retrieveComments: (NSString *)eventID withCompletion:(void(^)(NSArray *commentsArray))complete;
+
 
 @end

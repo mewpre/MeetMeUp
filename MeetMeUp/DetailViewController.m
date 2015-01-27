@@ -10,6 +10,7 @@
 #import "WebViewController.h"
 #import "MemberViewController.h"
 #import "Comment.h"
+#import "Member.h"
 
 @interface DetailViewController ()<UIWebViewDelegate, UITableViewDataSource, UITableViewDelegate>
 @property (strong, nonatomic) IBOutlet UILabel *hostingGroupLabel;
@@ -18,22 +19,26 @@
 @property (strong, nonatomic) IBOutlet UITableView *commentsTableView;
 @property BOOL didStartFirstRequest;
 
-@property NSMutableArray *commentsArray;
-
 @end
 
 @implementation DetailViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.descriptionWebView.delegate = self;
     self.navigationItem.title = self.event.name;
     self.hostingGroupLabel.text = self.event.hostingGroup;
     self.RSVPLabel.text = [NSString stringWithFormat:@"%@ %@ attending", self.event.RSVPcount, self.event.memberTitle];
     [self.descriptionWebView loadHTMLString:[self.event.HTMLDescription description] baseURL:nil];
-    self.commentsArray = [NSMutableArray new];
-    [self jsonParser:self.event.eventID];
+    [Comment retrieveComments:self.event.eventID withCompletion:^(NSArray *commentsArray)
+    {
+        self.event.commentsArray = commentsArray;
+        [self.commentsTableView reloadData];
+    }];
 }
+
+
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
@@ -47,48 +52,24 @@
     }
 }
 
--(void)jsonParser: (NSString *)eventID
-{
-    [self.commentsArray removeAllObjects];
-    NSString *urlString =[NSString stringWithFormat:@"https://api.meetup.com/2/event_comments?&sign=true&photo-host=public&event_id=%@&page=20&key=7e112a7d315af3ee18672e53675b43", eventID];
-    NSURL *url = [NSURL URLWithString:urlString];
-    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
-    [NSURLConnection sendAsynchronousRequest:urlRequest queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError)
-     {
-         NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-         NSArray *jsonArray = [json objectForKey:@"results"];
-         for (NSDictionary *comments in jsonArray)
-         {
-             Comment *newComment = [Comment new];
-             newComment.memberName = comments[@"member_name"];
-             newComment.memberID = comments[@"member_id"];
-             double time = [comments[@"time"] doubleValue] /1000;
-             newComment.commentDate = [NSDate dateWithTimeIntervalSince1970:time];
-             newComment.comment = comments[@"comment"];
-             [self.commentsArray addObject:newComment];
-         }
-         [self.commentsTableView reloadData];
-     }];
-}
-
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"commentCell"];
-    Comment *commentAtIndex = [self.commentsArray objectAtIndex:indexPath.row];
-    cell.textLabel.text = commentAtIndex.comment;
+    Comment *commentAtIndex = [self.event.commentsArray objectAtIndex:indexPath.row];
+    NSString *commentString = commentAtIndex.comment;
+    cell.textLabel.text = commentString;
     cell.textLabel.numberOfLines = 3;
     NSDateFormatter *df = [NSDateFormatter new];
     [df setDateFormat:@"MMMM dd, yyyy"];
     NSString *dateString = [df stringFromDate:commentAtIndex.commentDate];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@\n%@", commentAtIndex.memberName, dateString];
-    cell.detailTextLabel.numberOfLines = 2;
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@\n%@", commentAtIndex.member.name, dateString];
+    cell.detailTextLabel.numberOfLines = 3;
     return cell;
-    
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.commentsArray.count;
+    return self.event.commentsArray.count;
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -102,11 +83,9 @@
     {
         UITableViewCell *cell = (UITableViewCell *)sender;
         MemberViewController *mvc = segue.destinationViewController;
-        Comment *selectedComment = [self.commentsArray objectAtIndex:[[self.commentsTableView indexPathForCell:cell] row]];
-        mvc.memberID = selectedComment.memberID;
-        
+        Comment *selectedComment = [self.event.commentsArray objectAtIndex:[[self.commentsTableView indexPathForCell:cell] row]];
+        mvc.member = selectedComment.member;
     }
-
 }
 
 

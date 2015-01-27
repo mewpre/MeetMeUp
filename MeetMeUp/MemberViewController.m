@@ -7,10 +7,11 @@
 //
 
 #import "MemberViewController.h"
+#import "Member.h"
 
 @interface MemberViewController () <UITableViewDataSource, UITableViewDelegate>
 
-@property NSMutableArray *profileTopicsArray;
+@property (strong, nonatomic) NSArray *profileTopicsArray;
 @property (strong, nonatomic) IBOutlet UILabel *locationLabel;
 @property (strong, nonatomic) IBOutlet UIImageView *memberImageView;
 @property (strong, nonatomic) IBOutlet UITableView *topicsTableView;
@@ -25,44 +26,23 @@
 {
     [super viewDidLoad];
     self.profileTopicsArray = [NSMutableArray new];
-    // Create a navbar activity indicator, insert it into a UIBarButtonItem and set it right of the nav item
-    self.navbarActivityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-
-    UIBarButtonItem *navSpinnerBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.navbarActivityIndicator];
-    [self.navigationItem setRightBarButtonItem:navSpinnerBarButtonItem];
-    [self jsonParser:self.memberID];
+    [self createNavigationActivityIndicator];
+    [self.navbarActivityIndicator startAnimating];
+    [self.member retrieveMemberData:self.member.memberID withCompletion:^(NSArray *topicsArray)
+    {
+        self.navigationItem.title = self.member.name;
+        self.locationLabel.text = self.member.location;
+        self.memberImageView.image = [UIImage imageWithData:self.member.imageData];
+        self.profileTopicsArray = topicsArray;
+        [self.topicsTableView reloadData];
+    }];
 }
 
--(void)jsonParser: (NSString *)memberID
+- (void)setProfileTopicsArray:(NSArray *)profileTopicsArray
 {
-    // Start animating the spinner on view load
-    [self.navbarActivityIndicator startAnimating];
-    [self.profileTopicsArray removeAllObjects];
-    NSString *urlString =[NSString stringWithFormat:@"https://api.meetup.com/2/members?&sign=true&photo-host=public&member_id=%@&page=20&key=7e112a7d315af3ee18672e53675b43", memberID];
-    NSURL *url = [NSURL URLWithString:urlString];
-    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
-    [NSURLConnection sendAsynchronousRequest:urlRequest queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError)
-     {
-         NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-         NSArray *jsonArray = [json objectForKey:@"results"];
-        for (NSDictionary *user in jsonArray)
-         {
-             self.navigationItem.title = user[@"name"];
-             self.locationLabel.text = [NSString stringWithFormat:@"%@, %@", user[@"city"], user[@"state"]];
-             NSDictionary *photo = user[@"photo"];
-             NSURL *photoURL = [NSURL URLWithString:photo[@"photo_link"]];
-             self.memberImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:photoURL]];
-             NSArray *topics = user[@"topics"];
-             for (NSDictionary *topic in topics)
-             {
-                 NSString *topicName = topic[@"name"];
-                 [self.profileTopicsArray addObject:topicName];
-             }
-        }
-         [self.topicsTableView reloadData];
-         [self.navbarActivityIndicator stopAnimating];
-
-     }];
+    _profileTopicsArray = profileTopicsArray;
+    [self.topicsTableView reloadData];
+    [self.navbarActivityIndicator stopAnimating];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -71,6 +51,16 @@
     cell.textLabel.text = [self.profileTopicsArray objectAtIndex: indexPath.row];
     return cell;
 }
+
+- (void)createNavigationActivityIndicator
+{
+    // Create a navbar activity indicator, insert it into a UIBarButtonItem and set it right of the nav item
+    self.navbarActivityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+
+    UIBarButtonItem *navSpinnerBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.navbarActivityIndicator];
+    [self.navigationItem setRightBarButtonItem:navSpinnerBarButtonItem];
+}
+
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {

@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+@class Member;
 
 @interface MemberViewController : UIViewController
 
-@property NSString *memberID;
-
+@property Member *member;
+ 
 @end

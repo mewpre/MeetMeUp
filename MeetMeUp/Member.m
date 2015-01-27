@@ -10,6 +10,21 @@
 
 @implementation Member
 
+- (void)setMemberData:(NSDictionary *)dictionary
+{
+    self.location = [NSString stringWithFormat:@"%@, %@", dictionary[@"city"], dictionary[@"state"]];
+    NSURL *photoURL = [NSURL URLWithString:dictionary[@"photo"][@"photo_link"]];
+    self.imageData = [NSData dataWithContentsOfURL:photoURL];
+    NSArray *topics = dictionary[@"topics"];
+    NSMutableArray *tempArray = [NSMutableArray new];
+    for (NSDictionary *topic in topics)
+    {
+        NSString *topicName = topic[@"name"];
+        [tempArray addObject:topicName];
+    }
+    self.topics = tempArray;
+}
+
 - (void)retrieveMemberData: (NSString *)memberID withCompletion:(void(^)(NSArray *topicsArray))complete
 {
     // Start animating the spinner on view load
@@ -24,17 +39,7 @@
              NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
              NSArray *user = [json objectForKey:@"results"];
              NSDictionary *userDictionary = [user firstObject];
-             self.location = [NSString stringWithFormat:@"%@, %@", userDictionary[@"city"], userDictionary[@"state"]];
-             NSURL *photoURL = [NSURL URLWithString:userDictionary[@"photo"][@"photo_link"]];
-             self.imageData = [NSData dataWithContentsOfURL:photoURL];
-             NSArray *topics = userDictionary[@"topics"];
-             NSMutableArray *tempArray = [NSMutableArray new];
-             for (NSDictionary *topic in topics)
-             {
-                 NSString *topicName = topic[@"name"];
-                 [tempArray addObject:topicName];
-             }
-             self.topics = tempArray;
+             [self setMemberData:userDictionary];
          }
          complete(self.topics);
      }];
